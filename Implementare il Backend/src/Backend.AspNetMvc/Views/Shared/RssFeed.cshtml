@@ -1,0 +1,38 @@
+﻿@model System.ServiceModel.Syndication.SyndicationFeed
+@{
+    Layout = null;
+    Response.ContentType = "application/rss+xml";
+}
+<rss xmlns:a10="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>@Model.Title</title>
+        <description>@Model.Description</description>
+        <language>it-IT</language>
+        <managingeditor>info@ugidotnet.org</managingeditor>
+        <lastbuilddate>@Model.LastUpdatedTime</lastbuilddate>
+        <generator>Agorà Feed Generator</generator>
+        @foreach (var item in Model.Items)
+        {
+            <item>
+                <guid ispermalink="true">@string.Format("http://www.mysite.it{0}", UrlBuilder.ContentPage(item.Id, "product", item.Id))</guid>
+                @Html.Raw(string.Format("<link>http://www.mysite.it{0}</link>", UrlBuilder.ContentPage(item.Id, "product", item.Id)))
+            @foreach (var author in item.Authors)
+            {
+                <author>@author</author>
+            }
+            @foreach (var category in item.Categories)
+            {
+                <category>@category</category>
+            }
+                <title>@item.Title</title>
+                <description>
+                    @item.Summary
+                </description>
+                @Html.Raw("Elenco notizie CQMSG")
+                <pubdate>@item.PublishDate</pubdate>
+                <a10:updated>@item.LastUpdatedTime</a10:updated>
+                <a10:rights type="text">User Group Italiano .NET</a10:rights>
+            </item>
+        }
+    </channel>
+</rss>
